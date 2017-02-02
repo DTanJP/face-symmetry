@@ -1,0 +1,14 @@
+* CISC 4900 Project "Face Symmetry"
+
+The goal of this project is to write an R function to calculate the
+symmetry of a face.
+
+* Specifications
+
+A prototype for the desired function is:
+
+faceSymmetry( filename, axisSearch=0, xmin=NA, xmax=NA, ymin=NA, ymax=NA )
+
+* Materials
+
+- The Faces/ folder contains a few examples of faces
