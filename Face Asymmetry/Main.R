@@ -6,28 +6,31 @@
 #Load libraries
 library('jpeg')
 
-#A vector of numbers corresponding to the location of each tentative symmetry axis that has been tried.
-vector.axis = 0
-
-#A vector of numbers corresponding to the symmetry measured to each tentative symmetry axis.
-vector.asymmetry = 0
-
-#axisMax: the axis yielding the maximum symmetry.
-num.axisMax = 0
-
-#The maximum symmetry value.
-num.asymmetryMax = 0
+#List of graph data
+#1. axis: a vector of numbers corresponding to the location of each tentative symmetry axis that has been tried.
+#2. asymmetry: a vector of numbers corresponding to the symmetry measured to each tentative symmetry axis.
+#3. axisMax: the axis yielding the maximum symmetry.
+#4. asymmetryMax: the maximum symmetry value.
+list.graphVariables = list(vector.axis, vector.asymmetry, num.axis, num.asymmetryMax)
+names(list.graphVariables) = c("axis vector", "asymmetry vector", "axis", "asymmetry max")
 
 #Calculate the asymmetry of a face
 function.faceAsymmetry <- function(filename, axisSearch=0, xmin=NA, xmax=NA, ymin=NA, ymax=NA) {
   
-  #Accept only string for a filename
-  if(is.character(filename)) {
-    face.image <- readJPEG(system.file(face.image, filename), native = FALSE)
+  #Executes the algorithm only if the input parameters are correct
+  if(is.character(filename)
+     && is.numeric(axisSearch)
+     && is.numeric(xmin)
+     && is.numeric(xmax)
+     && is.numeric(ymin)
+     && is.numeric(ymax)) {
+    face.image = readJPEG(system.file(face.image, filename), native = FALSE)
     
     #If the image file exists
     if(!is.null(face.image)) {
-      
     }
+    list.graphVariables = list(vector.axis, vector.asymmetry, num.axis, num.asymmetryMax)
+    names(list.graphVariables) = c("axis vector", "asymmetry vector", "axis", "asymmetry max")
   }
 }
+
