@@ -26,27 +26,22 @@ function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax 
   num.asymmetryMax = 0
   
   #Read the image
-  image.face = readJPEG(filename, native = TRUE)
+  image.face = readJPEG(filename)
   
-  #Get the dimension of the jpeg
-  dimension.image.face = dim(image.face)
+  dim(image.face)
   
-  # Assign RGB channels to data frame
-  RGB.image.face <- data.frame(
-    x = rep(1:dimension.image.face[2], each = dimension.image.face[1]),
-    y = rep(dimension.image.face[1]:1, dimension.image.face[2]),
-    R = as.vector(image.face[1][1][1]),
-    G = as.vector(image.face[1][1][2]),
-    B = as.vector(image.face[1][1][3])
+  dataframe.face = data.frame(
+    red = matrix(image.face[,,1], ncol = 1),
+    green = matrix(image.face[,,2], ncol = 1),
+    blue = matrix(image.face[,,3], ncol = 1)
   )
   
-  print(RGB.image.face$B)
-  
+  print(dataframe.face)
   #Create a plot
-  plot(1, type="n", xlim=c(100, 200), ylim=c(300, 350))
+  #plot(1, type="n", xlim=c(100, 200), ylim=c(300, 350))
   
   #Draw the image onto the plot
-  rasterImage(image.face, 100, 300, 160, 350)
+  #rasterImage(image.face, 100, 300, 160, 350)
   
   #image.gray.face = 0
   
