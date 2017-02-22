@@ -5,17 +5,19 @@
 
 #Load libraries
 library('jpeg')
-library('imager')
 
-#Calculates the intensity value of f(x,y)
-function.intensityValue <- function(img, x, y) {
-  if(exists(img)) {
-    print("Image exists")
-  }
+#Variable to contain the image array
+image.face = 0
+
+#Calculates the intensity value of f(x,y) by averaging the rgb values
+function.intensityValue <- function(x, y) {
+  if((x < dim(image.face)[1] && x > 0) && (y < dim(image.face)[2] && y > 0))
+  return((image.face[x,y,1]+image.face[x,y,2]+image.face[x,y,3])/3)
 }
 
 #Calculate the asymmetry of a face
 function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax = NA, ymin = NA, ymax = NA) {
+  print("Starting function.faceAsymmetry")
   #Create empty vector variable
   vector.axis = numeric()
   #Create empty vector variable
@@ -27,25 +29,18 @@ function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax 
   
   #Read the image
   image.face = readJPEG(filename)
-  
   dim(image.face)
   
-  dataframe.face = data.frame(
-    red = matrix(image.face[,,1], ncol = 1),
-    green = matrix(image.face[,,2], ncol = 1),
-    blue = matrix(image.face[,,3], ncol = 1)
-  )
+  #DEBUG POINT 1
+  print("DEBUG POINT 1")
   
-  print(dataframe.face)
-  #Create a plot
-  #plot(1, type="n", xlim=c(100, 200), ylim=c(300, 350))
+  #If there is no delimiters, default should be the entire image
+  if(is.na(xmin)) xmin = 1
+  if(is.na(xmax)) xmax = dim(image.face)[1]
+  if(is.na(ymin)) ymin = 1
+  if(is.na(ymax)) ymax = dim(image.face)[2]
   
-  #Draw the image onto the plot
-  #rasterImage(image.face, 100, 300, 160, 350)
   
-  #image.gray.face = 0
-  
-  #print(vector.axis)
   #return (list(vector.axis, vector.asymmetry, num.axisMax, num.asymmetryMax))
 }
 
