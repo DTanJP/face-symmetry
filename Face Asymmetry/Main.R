@@ -13,11 +13,7 @@ function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax 
   vector.axis = c()
   #Create empty vector variable
   vector.asymmetry = c()
-  #Numeric variable
-  num.axisMax = 0
-  #Numeric variable
-  num.asymmetryMax = 0
-  #The symmetry axis
+  #The symmetry axis that is in between xmin and max
   symmetry.axis = 0
   
   #Read the image
@@ -33,9 +29,26 @@ function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax 
   if(is.na(ymin)) ymin = 1
   if(is.na(ymax)) ymax = dim(image.face)[2]
   
-  vector.axis = seq(from = xmin, to = xmax, by = axisSearch)
+  #Set the symmetry axis in the midline of the image
+  symmetry.axis = (xmax/2)
   
-  return (list(vector.axis, vector.asymmetry, num.axisMax, num.asymmetryMax))
+  #Save the x axis values that will be used in the calculations
+  vector.axis = (symmetry.axis-axisSearch) : (symmetry.axis+axisSearch)
+  
+  #Applying the equation onto the image
+  for(y in ymin:ymax) {
+    for(x in xmin:symmetry.axis) {#Loop from xmin - the symmetry line
+      #Get the point to the left side of the symmetry axis
+      point1 = function.intensityValue(image.face, x, y)
+      #Get the point to the right side of the symmetry axis
+      point2 = function.intensityValue(image.face, (symmetry.axis + (symmetry.axis - x)), y)
+      #Append the calculated value onto the vector
+      vector.asymmetry <- c(vector.asymmetry, function.equation(point1, point2))
+    }
+  }
+  
+  #Return the results
+  return (list(vector.axis, vector.asymmetry))
 }
 
 #Calculates the intensity value of f(x,y) by averaging the rgb values
@@ -43,13 +56,11 @@ function.intensityValue <- function(image.face, x, y) {
   return((image.face[x,y,1]+image.face[x,y,2]+image.face[x,y,3])/3)
 }
 
-function.integrand <- function(x, y) {
+#Calculates the asymmetry using 2 points(Intensity values)
+function.equation <- function(intensity.point1, intensity.point2) {
+  result = ((intensity.point1 - intensity.point2)^2)
 }
 
 #List of graph data
-#1. axis: a vector of numbers corresponding to the location of each tentative symmetry axis that has been tried.
-#2. asymmetry: a vector of numbers corresponding to the symmetry measured to each tentative symmetry axis.
-#3. axisMax: the axis yielding the maximum symmetry.
-#4. asymmetryMax: the maximum symmetry value.
-list.graphVariables <- function.faceAsymmetry("face1.jpg",10,1,100,1,100)
+list.graphVariables <- function.faceAsymmetry("face1.jpg",10,685,1700,500,1000)
 print("Done")
