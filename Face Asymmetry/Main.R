@@ -63,11 +63,9 @@ function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax 
         #print(paste(distance.x1, distance.x2, distance.x, sep = "   "))
         
         #Get the point to the left side of the symmetry axis
-        #point1 = image.face[x,y]
         point1 = image.face[axis - distance.x, y]
         
         #Get the point to the right side of the symmetry axis
-        #point2 = image.face[((2 * axis) - x), y]
         point2 = image.face[axis + distance.x, y]
         
         #Calculate the symmetry
@@ -75,25 +73,25 @@ function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax 
         
         #DEBUG
         #print(paste(distance.x, point1, point2, sep = "     "))
-        string.debug = paste(x, axis, ((axis * 2) - x), ((point1 - point2)^2), (" || "), sep = "  ~  ")
-        print(string.debug)
+        #string.debug = paste(x, axis, ((axis * 2) - x), ((point1 - point2)^2), (" || "), sep = "  ~  ")
+        #print(string.debug)
         }
       }
     }
     #DEBUG
     #print("")
-    
+  }
+    #Find the axis that has the maximum symmetry
+    if(num.symmetryMax < result) {
+      num.symmetryMax = result
+      num.axisMax = axis
     }
   }
   #Return the results
   return (list(vector.axis, vector.asymmetry, num.axisMax, num.symmetryMax))
 }
 
-#Converts a pixel to grayscale
-function.intensityValue <- function(x, y, array.image) {
-  return ((array.image[x,y,1] + array.image[x,y,2] + array.image[x,y,3])/3)
-} 
-
 #List of graph data
 list.graphVariables <- function.faceAsymmetry("face1.jpg",3,1,10,1,10)
+#The axis vector will contain [2, 3, 4, 5, 6, 7, 8] with 5 as the the starting axis
 print("Done")
