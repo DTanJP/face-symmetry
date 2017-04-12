@@ -7,7 +7,8 @@
 library('jpeg')
 
 #Calculate the asymmetry of a face
-function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax = NA, ymin = NA, ymax = NA) {
+function.faceAsymmetry <- function(filename = stop("Please provide a filename"),
+                                   axisSearch=0, xmin = NA, xmax = NA, ymin = NA, ymax = NA) {
   print("Starting function.faceAsymmetry")
   #Create empty vector variable
   vector.axis = c()
@@ -80,7 +81,8 @@ function.faceAsymmetry <- function(filename = NA, axisSearch=0, xmin = NA, xmax 
     }
     #DEBUG
     #print("")
-  }
+  } 
+    vector.asymmetry <- c(vector.asymmetry, result)
     #Find the axis that has the maximum symmetry
     if(num.symmetryMax < result) {
       num.symmetryMax = result
