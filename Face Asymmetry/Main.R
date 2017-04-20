@@ -81,8 +81,9 @@ function.faceAsymmetry <- function(filename = stop("Please provide a filename"),
     }
   }
   ##Return the results
-  return (list(imageName=filename, axis=vector.axis, asymmetry=vector.asymmetry, axisMin=num.axisMin, asymmetryMin=num.asymmetryMin))
-}
+  ##return (list(imageName=filename, axis=vector.axis, asymmetry=vector.asymmetry, axisMin=num.axisMin, asymmetryMin=num.asymmetryMin))
+  return(list(imageName=filename, axisMin = num.axisMin, asymmetryMin = num.asymmetryMin))
+  }
 
 #function.exportData: Applies all jpeg files to function.faceAsymmetry in a directory and exports to a CSV file.
 #directory: The directory containing the images to be search for. Does not go into subdirectories to search.
@@ -95,7 +96,7 @@ function.exportData <- function(directory = stop("Specify a directory to search 
   list.jpeg <- list.files(directory)[grep(pattern = ".jpg", x = list.files(directory))]
   
   ##The collection of data from all the jpg files
-  asymmetry.data = c()
+  asymmetry.data = data.frame(imageName = c(), axisMin = c(), asymmetryMin = c())
   
   #Print the amount of jpg files found
   print(paste("Found", length(list.jpeg), "jpg files."))
@@ -111,14 +112,20 @@ function.exportData <- function(directory = stop("Specify a directory to search 
   for(i in 1:length(list.jpeg)) {
     image.name = paste(directory,list.jpeg[i], sep = "")
     print(paste(i,":", image.name), sep = NA)
-    asymmetry.data <- c(asymmetry.data, c(function.faceAsymmetry(image.name, axisSearch, NA, NA, NA, NA), c("")))
+    image.data = c(function.faceAsymmetry(image.name, axisSearch, NA, NA, NA, NA))
+    
+    #Save the data into a data.frame format
+    result.data <- data.frame(imageName = c(image.data$imageName), axisMin = c(image.data$axisMin), asymmetryMin = c(image.data$asymmetryMin))
+    
+    #Combine result.data with asymmetry.data
+    asymmetry.data <- rbind(asymmetry.data, result.data)
   }
   
   #frame.asymmetry <- cbind(asymmetry.data)
   #print(frame.asymmetry)
   
   #DEBUG: Show the data collected from the images
-  #print(asymmetry.data)
+  print(asymmetry.data)
   
   #Saves the data to FaceAsymmetry.csv
   write.csv(asymmetry.data, "FaceAsymmetry.csv", row.names = FALSE, eol = "\n")
